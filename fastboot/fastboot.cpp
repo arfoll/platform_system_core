@@ -59,10 +59,10 @@
 #include <android-base/stringprintf.h>
 #include <android-base/strings.h>
 #include <android-base/unique_fd.h>
-#include <build/version.h>
+//#include <build/version.h>
 #include <libavb/libavb.h>
-#include <liblp/liblp.h>
-#include <platform_tools_version.h>
+//#include <liblp/liblp.h>
+//#include <platform_tools_version.h>
 #include <sparse/sparse.h>
 #include <ziparchive/zip_archive.h>
 
@@ -1670,6 +1670,7 @@ failed:
 }
 
 static bool should_flash_in_userspace(const std::string& partition_name) {
+#if 0
     if (!get_android_product_out()) {
         return false;
     }
@@ -1694,9 +1695,12 @@ static bool should_flash_in_userspace(const std::string& partition_name) {
             return true;
         }
     }
+#else
     return false;
+#endif
 }
 
+#if 0
 static bool wipe_super(const android::fs_mgr::LpMetadata& metadata, const std::string& slot,
                        std::string* message) {
     auto super_device = GetMetadataSuperBlockDevice(metadata);
@@ -1746,8 +1750,10 @@ static bool wipe_super(const android::fs_mgr::LpMetadata& metadata, const std::s
     }
     return true;
 }
+#endif
 
 static void do_wipe_super(const std::string& image, const std::string& slot_override) {
+#if 0
     if (access(image.c_str(), R_OK) != 0) {
         die("Could not read image: %s", image.c_str());
     }
@@ -1765,6 +1771,7 @@ static void do_wipe_super(const std::string& image, const std::string& slot_over
     if (!wipe_super(*metadata.get(), slot, &message)) {
         die(message);
     }
+#endif
 }
 
 int FastBootTool::Main(int argc, char* argv[]) {
@@ -1863,7 +1870,9 @@ int FastBootTool::Main(int argc, char* argv[]) {
                 setvbuf(stdout, nullptr, _IONBF, 0);
                 setvbuf(stderr, nullptr, _IONBF, 0);
             } else if (name == "version") {
+#if 0
                 fprintf(stdout, "fastboot version %s-%s\n", PLATFORM_TOOLS_VERSION, android::build::GetBuildNumber().c_str());
+#endif
                 fprintf(stdout, "Installed as %s\n", android::base::GetExecutablePath().c_str());
                 return 0;
 #if !defined(_WIN32)
